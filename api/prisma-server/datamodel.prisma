@@ -1,0 +1,50 @@
+type User {
+  id: ID! @unique
+  email: String @unique
+  name: String!
+  timezone: String
+  habits: [Habit!]! # user has habits
+}
+
+enum HabitFrequency {
+  DAILY
+  WEEKLY
+  DAYS_PER_WEEK
+  COUNT_PER_WEER
+}
+
+enum HabitSchedule {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
+}
+
+type Habit {
+  id: ID! @unique
+  task: String!
+  active: Boolean! @default(value: "true")
+  avatarName: String!
+  avatarColor: String!
+  frequency: HabitFrequency!
+  weeklyCount: Int
+  weeklySchedule: HabitSchedule
+  health: Float! # 0...1
+  user: User! # habit belongs to a user
+}
+
+type Activity {
+  id: ID! @unique
+  user: User!
+  habit: Habit!
+  timestamp: Int!
+}
+
+type Avatar {
+  id: ID! @unique
+  name: String!
+  color: String!
+}

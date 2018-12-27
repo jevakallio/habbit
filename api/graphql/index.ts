@@ -1,22 +1,31 @@
-import { prisma } from "./prisma-client";
+import { prisma, Prisma } from "./prisma-client";
 import { GraphQLServer } from "graphql-yoga";
+
+type Context = {
+  prisma: Prisma;
+};
 
 const resolvers = {
   Query: {
-    users(parent, args, context) {
-      return context.prisma.users();
+    user(parent, args, context: Context) {
+      return context.prisma.user({ id: args.id });
     }
   },
   Mutation: {
-    createUser(parent, args, context) {
+    createUser(parent, args, context: Context) {
       return context.prisma.createUser({ name: args.name, email: args.email });
+    }
+  },
+  User: {
+    habits(parent, args, context: Context) {
+      return context.prisma.user({ id: parent.id }).habits();
     }
   }
 };
 
 const typeDefs = `
 type Query {
-  users: [User!]!
+  user(id: ID!): User
 }
 
 type Mutation {
@@ -26,6 +35,17 @@ type Mutation {
 type User {
   id: ID!
   name: String!
+  email: String
+  timezone: String
+  habits: [Habit!]!
+}
+
+type Habit {
+  id: ID!
+  task: String!
+  active: Boolean!
+  avatarName: String!
+  avatarColor: String!
 }
 `;
 const server = new GraphQLServer({

@@ -14,6 +14,9 @@ export type AtLeastOne<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> &
   U[keyof U];
 
 export interface Exists {
+  activity: (where?: ActivityWhereInput) => Promise<boolean>;
+  avatar: (where?: AvatarWhereInput) => Promise<boolean>;
+  habit: (where?: HabitWhereInput) => Promise<boolean>;
   user: (where?: UserWhereInput) => Promise<boolean>;
 }
 
@@ -36,6 +39,75 @@ export interface Prisma {
    * Queries
    */
 
+  activity: (where: ActivityWhereUniqueInput) => ActivityPromise;
+  activities: (
+    args?: {
+      where?: ActivityWhereInput;
+      orderBy?: ActivityOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => FragmentableArray<Activity>;
+  activitiesConnection: (
+    args?: {
+      where?: ActivityWhereInput;
+      orderBy?: ActivityOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => ActivityConnectionPromise;
+  avatar: (where: AvatarWhereUniqueInput) => AvatarPromise;
+  avatars: (
+    args?: {
+      where?: AvatarWhereInput;
+      orderBy?: AvatarOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => FragmentableArray<Avatar>;
+  avatarsConnection: (
+    args?: {
+      where?: AvatarWhereInput;
+      orderBy?: AvatarOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => AvatarConnectionPromise;
+  habit: (where: HabitWhereUniqueInput) => HabitPromise;
+  habits: (
+    args?: {
+      where?: HabitWhereInput;
+      orderBy?: HabitOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => FragmentableArray<Habit>;
+  habitsConnection: (
+    args?: {
+      where?: HabitWhereInput;
+      orderBy?: HabitOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => HabitConnectionPromise;
   user: (where: UserWhereUniqueInput) => UserPromise;
   users: (
     args?: {
@@ -65,6 +137,54 @@ export interface Prisma {
    * Mutations
    */
 
+  createActivity: (data: ActivityCreateInput) => ActivityPromise;
+  updateActivity: (
+    args: { data: ActivityUpdateInput; where: ActivityWhereUniqueInput }
+  ) => ActivityPromise;
+  updateManyActivities: (
+    args: { data: ActivityUpdateManyMutationInput; where?: ActivityWhereInput }
+  ) => BatchPayloadPromise;
+  upsertActivity: (
+    args: {
+      where: ActivityWhereUniqueInput;
+      create: ActivityCreateInput;
+      update: ActivityUpdateInput;
+    }
+  ) => ActivityPromise;
+  deleteActivity: (where: ActivityWhereUniqueInput) => ActivityPromise;
+  deleteManyActivities: (where?: ActivityWhereInput) => BatchPayloadPromise;
+  createAvatar: (data: AvatarCreateInput) => AvatarPromise;
+  updateAvatar: (
+    args: { data: AvatarUpdateInput; where: AvatarWhereUniqueInput }
+  ) => AvatarPromise;
+  updateManyAvatars: (
+    args: { data: AvatarUpdateManyMutationInput; where?: AvatarWhereInput }
+  ) => BatchPayloadPromise;
+  upsertAvatar: (
+    args: {
+      where: AvatarWhereUniqueInput;
+      create: AvatarCreateInput;
+      update: AvatarUpdateInput;
+    }
+  ) => AvatarPromise;
+  deleteAvatar: (where: AvatarWhereUniqueInput) => AvatarPromise;
+  deleteManyAvatars: (where?: AvatarWhereInput) => BatchPayloadPromise;
+  createHabit: (data: HabitCreateInput) => HabitPromise;
+  updateHabit: (
+    args: { data: HabitUpdateInput; where: HabitWhereUniqueInput }
+  ) => HabitPromise;
+  updateManyHabits: (
+    args: { data: HabitUpdateManyMutationInput; where?: HabitWhereInput }
+  ) => BatchPayloadPromise;
+  upsertHabit: (
+    args: {
+      where: HabitWhereUniqueInput;
+      create: HabitCreateInput;
+      update: HabitUpdateInput;
+    }
+  ) => HabitPromise;
+  deleteHabit: (where: HabitWhereUniqueInput) => HabitPromise;
+  deleteManyHabits: (where?: HabitWhereInput) => BatchPayloadPromise;
   createUser: (data: UserCreateInput) => UserPromise;
   updateUser: (
     args: { data: UserUpdateInput; where: UserWhereUniqueInput }
@@ -90,6 +210,15 @@ export interface Prisma {
 }
 
 export interface Subscription {
+  activity: (
+    where?: ActivitySubscriptionWhereInput
+  ) => ActivitySubscriptionPayloadSubscription;
+  avatar: (
+    where?: AvatarSubscriptionWhereInput
+  ) => AvatarSubscriptionPayloadSubscription;
+  habit: (
+    where?: HabitSubscriptionWhereInput
+  ) => HabitSubscriptionPayloadSubscription;
   user: (
     where?: UserSubscriptionWhereInput
   ) => UserSubscriptionPayloadSubscription;
@@ -103,11 +232,76 @@ export interface ClientConstructor<T> {
  * Types
  */
 
-export type UserOrderByInput =
+export type HabitSchedule =
+  | "MONDAY"
+  | "TUESDAY"
+  | "WEDNESDAY"
+  | "THURSDAY"
+  | "FRIDAY"
+  | "SATURDAY"
+  | "SUNDAY";
+
+export type HabitFrequency =
+  | "DAILY"
+  | "WEEKLY"
+  | "DAYS_PER_WEEK"
+  | "COUNT_PER_WEER";
+
+export type HabitOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "task_ASC"
+  | "task_DESC"
+  | "active_ASC"
+  | "active_DESC"
+  | "avatarName_ASC"
+  | "avatarName_DESC"
+  | "avatarColor_ASC"
+  | "avatarColor_DESC"
+  | "frequency_ASC"
+  | "frequency_DESC"
+  | "weeklyCount_ASC"
+  | "weeklyCount_DESC"
+  | "weeklySchedule_ASC"
+  | "weeklySchedule_DESC"
+  | "health_ASC"
+  | "health_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC";
+
+export type ActivityOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "timestamp_ASC"
+  | "timestamp_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC";
+
+export type AvatarOrderByInput =
   | "id_ASC"
   | "id_DESC"
   | "name_ASC"
   | "name_DESC"
+  | "color_ASC"
+  | "color_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC";
+
+export type UserOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "email_ASC"
+  | "email_DESC"
+  | "name_ASC"
+  | "name_DESC"
+  | "timezone_ASC"
+  | "timezone_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
@@ -115,19 +309,140 @@ export type UserOrderByInput =
 
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
-export interface UserCreateInput {
-  name: String;
+export interface HabitCreateInput {
+  task: String;
+  active?: Boolean;
+  avatarName: String;
+  avatarColor: String;
+  frequency: HabitFrequency;
+  weeklyCount?: Int;
+  weeklySchedule?: HabitSchedule;
+  health: Float;
+  user: UserCreateOneWithoutHabitsInput;
 }
 
-export interface UserUpdateInput {
+export type ActivityWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface UserUpdateWithoutHabitsDataInput {
+  email?: String;
   name?: String;
+  timezone?: String;
+}
+
+export interface HabitUpdateManyWithWhereNestedInput {
+  where: HabitScalarWhereInput;
+  data: HabitUpdateManyDataInput;
+}
+
+export interface UserUpdateOneRequiredWithoutHabitsInput {
+  create?: UserCreateWithoutHabitsInput;
+  update?: UserUpdateWithoutHabitsDataInput;
+  upsert?: UserUpsertWithoutHabitsInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface UserUpdateOneRequiredInput {
+  create?: UserCreateInput;
+  update?: UserUpdateDataInput;
+  upsert?: UserUpsertNestedInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface HabitUpdateDataInput {
+  task?: String;
+  active?: Boolean;
+  avatarName?: String;
+  avatarColor?: String;
+  frequency?: HabitFrequency;
+  weeklyCount?: Int;
+  weeklySchedule?: HabitSchedule;
+  health?: Float;
+  user?: UserUpdateOneRequiredWithoutHabitsInput;
+}
+
+export interface UserSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: UserWhereInput;
+  AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+  OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+  NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+}
+
+export interface HabitUpdateOneRequiredInput {
+  create?: HabitCreateInput;
+  update?: HabitUpdateDataInput;
+  upsert?: HabitUpsertNestedInput;
+  connect?: HabitWhereUniqueInput;
+}
+
+export interface ActivityWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  user?: UserWhereInput;
+  habit?: HabitWhereInput;
+  timestamp?: Int;
+  timestamp_not?: Int;
+  timestamp_in?: Int[] | Int;
+  timestamp_not_in?: Int[] | Int;
+  timestamp_lt?: Int;
+  timestamp_lte?: Int;
+  timestamp_gt?: Int;
+  timestamp_gte?: Int;
+  AND?: ActivityWhereInput[] | ActivityWhereInput;
+  OR?: ActivityWhereInput[] | ActivityWhereInput;
+  NOT?: ActivityWhereInput[] | ActivityWhereInput;
+}
+
+export interface AvatarSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: AvatarWhereInput;
+  AND?: AvatarSubscriptionWhereInput[] | AvatarSubscriptionWhereInput;
+  OR?: AvatarSubscriptionWhereInput[] | AvatarSubscriptionWhereInput;
+  NOT?: AvatarSubscriptionWhereInput[] | AvatarSubscriptionWhereInput;
 }
 
 export interface UserUpdateManyMutationInput {
+  email?: String;
   name?: String;
+  timezone?: String;
 }
 
-export interface UserWhereInput {
+export interface ActivityCreateInput {
+  user: UserCreateOneInput;
+  habit: HabitCreateOneInput;
+  timestamp: Int;
+}
+
+export type AvatarWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface UserCreateOneInput {
+  create?: UserCreateInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface AvatarWhereInput {
   id?: ID_Input;
   id_not?: ID_Input;
   id_in?: ID_Input[] | ID_Input;
@@ -156,44 +471,774 @@ export interface UserWhereInput {
   name_not_starts_with?: String;
   name_ends_with?: String;
   name_not_ends_with?: String;
+  color?: String;
+  color_not?: String;
+  color_in?: String[] | String;
+  color_not_in?: String[] | String;
+  color_lt?: String;
+  color_lte?: String;
+  color_gt?: String;
+  color_gte?: String;
+  color_contains?: String;
+  color_not_contains?: String;
+  color_starts_with?: String;
+  color_not_starts_with?: String;
+  color_ends_with?: String;
+  color_not_ends_with?: String;
+  AND?: AvatarWhereInput[] | AvatarWhereInput;
+  OR?: AvatarWhereInput[] | AvatarWhereInput;
+  NOT?: AvatarWhereInput[] | AvatarWhereInput;
+}
+
+export interface UserCreateInput {
+  email?: String;
+  name: String;
+  timezone?: String;
+  habits?: HabitCreateManyWithoutUserInput;
+}
+
+export interface AvatarUpdateManyMutationInput {
+  name?: String;
+  color?: String;
+}
+
+export interface HabitCreateManyWithoutUserInput {
+  create?: HabitCreateWithoutUserInput[] | HabitCreateWithoutUserInput;
+  connect?: HabitWhereUniqueInput[] | HabitWhereUniqueInput;
+}
+
+export interface AvatarCreateInput {
+  name: String;
+  color: String;
+}
+
+export interface HabitCreateWithoutUserInput {
+  task: String;
+  active?: Boolean;
+  avatarName: String;
+  avatarColor: String;
+  frequency: HabitFrequency;
+  weeklyCount?: Int;
+  weeklySchedule?: HabitSchedule;
+  health: Float;
+}
+
+export interface ActivityUpdateManyMutationInput {
+  timestamp?: Int;
+}
+
+export interface HabitCreateOneInput {
+  create?: HabitCreateInput;
+  connect?: HabitWhereUniqueInput;
+}
+
+export interface UserUpsertWithoutHabitsInput {
+  update: UserUpdateWithoutHabitsDataInput;
+  create: UserCreateWithoutHabitsInput;
+}
+
+export interface UserUpsertNestedInput {
+  update: UserUpdateDataInput;
+  create: UserCreateInput;
+}
+
+export interface UserWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  email?: String;
+  email_not?: String;
+  email_in?: String[] | String;
+  email_not_in?: String[] | String;
+  email_lt?: String;
+  email_lte?: String;
+  email_gt?: String;
+  email_gte?: String;
+  email_contains?: String;
+  email_not_contains?: String;
+  email_starts_with?: String;
+  email_not_starts_with?: String;
+  email_ends_with?: String;
+  email_not_ends_with?: String;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  timezone?: String;
+  timezone_not?: String;
+  timezone_in?: String[] | String;
+  timezone_not_in?: String[] | String;
+  timezone_lt?: String;
+  timezone_lte?: String;
+  timezone_gt?: String;
+  timezone_gte?: String;
+  timezone_contains?: String;
+  timezone_not_contains?: String;
+  timezone_starts_with?: String;
+  timezone_not_starts_with?: String;
+  timezone_ends_with?: String;
+  timezone_not_ends_with?: String;
+  habits_every?: HabitWhereInput;
+  habits_some?: HabitWhereInput;
+  habits_none?: HabitWhereInput;
   AND?: UserWhereInput[] | UserWhereInput;
   OR?: UserWhereInput[] | UserWhereInput;
   NOT?: UserWhereInput[] | UserWhereInput;
 }
 
-export interface UserSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: UserWhereInput;
-  AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
-  OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
-  NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+export interface UserCreateOneWithoutHabitsInput {
+  create?: UserCreateWithoutHabitsInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface HabitWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  task?: String;
+  task_not?: String;
+  task_in?: String[] | String;
+  task_not_in?: String[] | String;
+  task_lt?: String;
+  task_lte?: String;
+  task_gt?: String;
+  task_gte?: String;
+  task_contains?: String;
+  task_not_contains?: String;
+  task_starts_with?: String;
+  task_not_starts_with?: String;
+  task_ends_with?: String;
+  task_not_ends_with?: String;
+  active?: Boolean;
+  active_not?: Boolean;
+  avatarName?: String;
+  avatarName_not?: String;
+  avatarName_in?: String[] | String;
+  avatarName_not_in?: String[] | String;
+  avatarName_lt?: String;
+  avatarName_lte?: String;
+  avatarName_gt?: String;
+  avatarName_gte?: String;
+  avatarName_contains?: String;
+  avatarName_not_contains?: String;
+  avatarName_starts_with?: String;
+  avatarName_not_starts_with?: String;
+  avatarName_ends_with?: String;
+  avatarName_not_ends_with?: String;
+  avatarColor?: String;
+  avatarColor_not?: String;
+  avatarColor_in?: String[] | String;
+  avatarColor_not_in?: String[] | String;
+  avatarColor_lt?: String;
+  avatarColor_lte?: String;
+  avatarColor_gt?: String;
+  avatarColor_gte?: String;
+  avatarColor_contains?: String;
+  avatarColor_not_contains?: String;
+  avatarColor_starts_with?: String;
+  avatarColor_not_starts_with?: String;
+  avatarColor_ends_with?: String;
+  avatarColor_not_ends_with?: String;
+  frequency?: HabitFrequency;
+  frequency_not?: HabitFrequency;
+  frequency_in?: HabitFrequency[] | HabitFrequency;
+  frequency_not_in?: HabitFrequency[] | HabitFrequency;
+  weeklyCount?: Int;
+  weeklyCount_not?: Int;
+  weeklyCount_in?: Int[] | Int;
+  weeklyCount_not_in?: Int[] | Int;
+  weeklyCount_lt?: Int;
+  weeklyCount_lte?: Int;
+  weeklyCount_gt?: Int;
+  weeklyCount_gte?: Int;
+  weeklySchedule?: HabitSchedule;
+  weeklySchedule_not?: HabitSchedule;
+  weeklySchedule_in?: HabitSchedule[] | HabitSchedule;
+  weeklySchedule_not_in?: HabitSchedule[] | HabitSchedule;
+  health?: Float;
+  health_not?: Float;
+  health_in?: Float[] | Float;
+  health_not_in?: Float[] | Float;
+  health_lt?: Float;
+  health_lte?: Float;
+  health_gt?: Float;
+  health_gte?: Float;
+  user?: UserWhereInput;
+  AND?: HabitWhereInput[] | HabitWhereInput;
+  OR?: HabitWhereInput[] | HabitWhereInput;
+  NOT?: HabitWhereInput[] | HabitWhereInput;
+}
+
+export interface UserCreateWithoutHabitsInput {
+  email?: String;
+  name: String;
+  timezone?: String;
+}
+
+export interface UserUpdateInput {
+  email?: String;
+  name?: String;
+  timezone?: String;
+  habits?: HabitUpdateManyWithoutUserInput;
+}
+
+export interface ActivityUpdateInput {
+  user?: UserUpdateOneRequiredInput;
+  habit?: HabitUpdateOneRequiredInput;
+  timestamp?: Int;
+}
+
+export interface HabitUpdateInput {
+  task?: String;
+  active?: Boolean;
+  avatarName?: String;
+  avatarColor?: String;
+  frequency?: HabitFrequency;
+  weeklyCount?: Int;
+  weeklySchedule?: HabitSchedule;
+  health?: Float;
+  user?: UserUpdateOneRequiredWithoutHabitsInput;
+}
+
+export interface HabitUpdateManyDataInput {
+  task?: String;
+  active?: Boolean;
+  avatarName?: String;
+  avatarColor?: String;
+  frequency?: HabitFrequency;
+  weeklyCount?: Int;
+  weeklySchedule?: HabitSchedule;
+  health?: Float;
+}
+
+export type HabitWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface UserUpdateDataInput {
+  email?: String;
+  name?: String;
+  timezone?: String;
+  habits?: HabitUpdateManyWithoutUserInput;
 }
 
 export type UserWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
+  email?: String;
 }>;
+
+export interface HabitUpdateManyWithoutUserInput {
+  create?: HabitCreateWithoutUserInput[] | HabitCreateWithoutUserInput;
+  delete?: HabitWhereUniqueInput[] | HabitWhereUniqueInput;
+  connect?: HabitWhereUniqueInput[] | HabitWhereUniqueInput;
+  disconnect?: HabitWhereUniqueInput[] | HabitWhereUniqueInput;
+  update?:
+    | HabitUpdateWithWhereUniqueWithoutUserInput[]
+    | HabitUpdateWithWhereUniqueWithoutUserInput;
+  upsert?:
+    | HabitUpsertWithWhereUniqueWithoutUserInput[]
+    | HabitUpsertWithWhereUniqueWithoutUserInput;
+  deleteMany?: HabitScalarWhereInput[] | HabitScalarWhereInput;
+  updateMany?:
+    | HabitUpdateManyWithWhereNestedInput[]
+    | HabitUpdateManyWithWhereNestedInput;
+}
+
+export interface ActivitySubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: ActivityWhereInput;
+  AND?: ActivitySubscriptionWhereInput[] | ActivitySubscriptionWhereInput;
+  OR?: ActivitySubscriptionWhereInput[] | ActivitySubscriptionWhereInput;
+  NOT?: ActivitySubscriptionWhereInput[] | ActivitySubscriptionWhereInput;
+}
+
+export interface HabitScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  task?: String;
+  task_not?: String;
+  task_in?: String[] | String;
+  task_not_in?: String[] | String;
+  task_lt?: String;
+  task_lte?: String;
+  task_gt?: String;
+  task_gte?: String;
+  task_contains?: String;
+  task_not_contains?: String;
+  task_starts_with?: String;
+  task_not_starts_with?: String;
+  task_ends_with?: String;
+  task_not_ends_with?: String;
+  active?: Boolean;
+  active_not?: Boolean;
+  avatarName?: String;
+  avatarName_not?: String;
+  avatarName_in?: String[] | String;
+  avatarName_not_in?: String[] | String;
+  avatarName_lt?: String;
+  avatarName_lte?: String;
+  avatarName_gt?: String;
+  avatarName_gte?: String;
+  avatarName_contains?: String;
+  avatarName_not_contains?: String;
+  avatarName_starts_with?: String;
+  avatarName_not_starts_with?: String;
+  avatarName_ends_with?: String;
+  avatarName_not_ends_with?: String;
+  avatarColor?: String;
+  avatarColor_not?: String;
+  avatarColor_in?: String[] | String;
+  avatarColor_not_in?: String[] | String;
+  avatarColor_lt?: String;
+  avatarColor_lte?: String;
+  avatarColor_gt?: String;
+  avatarColor_gte?: String;
+  avatarColor_contains?: String;
+  avatarColor_not_contains?: String;
+  avatarColor_starts_with?: String;
+  avatarColor_not_starts_with?: String;
+  avatarColor_ends_with?: String;
+  avatarColor_not_ends_with?: String;
+  frequency?: HabitFrequency;
+  frequency_not?: HabitFrequency;
+  frequency_in?: HabitFrequency[] | HabitFrequency;
+  frequency_not_in?: HabitFrequency[] | HabitFrequency;
+  weeklyCount?: Int;
+  weeklyCount_not?: Int;
+  weeklyCount_in?: Int[] | Int;
+  weeklyCount_not_in?: Int[] | Int;
+  weeklyCount_lt?: Int;
+  weeklyCount_lte?: Int;
+  weeklyCount_gt?: Int;
+  weeklyCount_gte?: Int;
+  weeklySchedule?: HabitSchedule;
+  weeklySchedule_not?: HabitSchedule;
+  weeklySchedule_in?: HabitSchedule[] | HabitSchedule;
+  weeklySchedule_not_in?: HabitSchedule[] | HabitSchedule;
+  health?: Float;
+  health_not?: Float;
+  health_in?: Float[] | Float;
+  health_not_in?: Float[] | Float;
+  health_lt?: Float;
+  health_lte?: Float;
+  health_gt?: Float;
+  health_gte?: Float;
+  AND?: HabitScalarWhereInput[] | HabitScalarWhereInput;
+  OR?: HabitScalarWhereInput[] | HabitScalarWhereInput;
+  NOT?: HabitScalarWhereInput[] | HabitScalarWhereInput;
+}
+
+export interface HabitUpsertWithWhereUniqueWithoutUserInput {
+  where: HabitWhereUniqueInput;
+  update: HabitUpdateWithoutUserDataInput;
+  create: HabitCreateWithoutUserInput;
+}
+
+export interface HabitUpdateWithoutUserDataInput {
+  task?: String;
+  active?: Boolean;
+  avatarName?: String;
+  avatarColor?: String;
+  frequency?: HabitFrequency;
+  weeklyCount?: Int;
+  weeklySchedule?: HabitSchedule;
+  health?: Float;
+}
+
+export interface HabitUpdateWithWhereUniqueWithoutUserInput {
+  where: HabitWhereUniqueInput;
+  data: HabitUpdateWithoutUserDataInput;
+}
+
+export interface HabitUpdateManyMutationInput {
+  task?: String;
+  active?: Boolean;
+  avatarName?: String;
+  avatarColor?: String;
+  frequency?: HabitFrequency;
+  weeklyCount?: Int;
+  weeklySchedule?: HabitSchedule;
+  health?: Float;
+}
+
+export interface HabitSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: HabitWhereInput;
+  AND?: HabitSubscriptionWhereInput[] | HabitSubscriptionWhereInput;
+  OR?: HabitSubscriptionWhereInput[] | HabitSubscriptionWhereInput;
+  NOT?: HabitSubscriptionWhereInput[] | HabitSubscriptionWhereInput;
+}
+
+export interface HabitUpsertNestedInput {
+  update: HabitUpdateDataInput;
+  create: HabitCreateInput;
+}
+
+export interface AvatarUpdateInput {
+  name?: String;
+  color?: String;
+}
 
 export interface NodeNode {
   id: ID_Output;
 }
 
-export interface AggregateUser {
+export interface UserPreviousValues {
+  id: ID_Output;
+  email?: String;
+  name: String;
+  timezone?: String;
+}
+
+export interface UserPreviousValuesPromise
+  extends Promise<UserPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  email: () => Promise<String>;
+  name: () => Promise<String>;
+  timezone: () => Promise<String>;
+}
+
+export interface UserPreviousValuesSubscription
+  extends Promise<AsyncIterator<UserPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  email: () => Promise<AsyncIterator<String>>;
+  name: () => Promise<AsyncIterator<String>>;
+  timezone: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AvatarConnection {
+  pageInfo: PageInfo;
+  edges: AvatarEdge[];
+}
+
+export interface AvatarConnectionPromise
+  extends Promise<AvatarConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<AvatarEdge>>() => T;
+  aggregate: <T = AggregateAvatarPromise>() => T;
+}
+
+export interface AvatarConnectionSubscription
+  extends Promise<AsyncIterator<AvatarConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<AvatarEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateAvatarSubscription>() => T;
+}
+
+export interface Habit {
+  id: ID_Output;
+  task: String;
+  active: Boolean;
+  avatarName: String;
+  avatarColor: String;
+  frequency: HabitFrequency;
+  weeklyCount?: Int;
+  weeklySchedule?: HabitSchedule;
+  health: Float;
+}
+
+export interface HabitPromise extends Promise<Habit>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  task: () => Promise<String>;
+  active: () => Promise<Boolean>;
+  avatarName: () => Promise<String>;
+  avatarColor: () => Promise<String>;
+  frequency: () => Promise<HabitFrequency>;
+  weeklyCount: () => Promise<Int>;
+  weeklySchedule: () => Promise<HabitSchedule>;
+  health: () => Promise<Float>;
+  user: <T = UserPromise>() => T;
+}
+
+export interface HabitSubscription
+  extends Promise<AsyncIterator<Habit>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  task: () => Promise<AsyncIterator<String>>;
+  active: () => Promise<AsyncIterator<Boolean>>;
+  avatarName: () => Promise<AsyncIterator<String>>;
+  avatarColor: () => Promise<AsyncIterator<String>>;
+  frequency: () => Promise<AsyncIterator<HabitFrequency>>;
+  weeklyCount: () => Promise<AsyncIterator<Int>>;
+  weeklySchedule: () => Promise<AsyncIterator<HabitSchedule>>;
+  health: () => Promise<AsyncIterator<Float>>;
+  user: <T = UserSubscription>() => T;
+}
+
+export interface HabitPreviousValues {
+  id: ID_Output;
+  task: String;
+  active: Boolean;
+  avatarName: String;
+  avatarColor: String;
+  frequency: HabitFrequency;
+  weeklyCount?: Int;
+  weeklySchedule?: HabitSchedule;
+  health: Float;
+}
+
+export interface HabitPreviousValuesPromise
+  extends Promise<HabitPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  task: () => Promise<String>;
+  active: () => Promise<Boolean>;
+  avatarName: () => Promise<String>;
+  avatarColor: () => Promise<String>;
+  frequency: () => Promise<HabitFrequency>;
+  weeklyCount: () => Promise<Int>;
+  weeklySchedule: () => Promise<HabitSchedule>;
+  health: () => Promise<Float>;
+}
+
+export interface HabitPreviousValuesSubscription
+  extends Promise<AsyncIterator<HabitPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  task: () => Promise<AsyncIterator<String>>;
+  active: () => Promise<AsyncIterator<Boolean>>;
+  avatarName: () => Promise<AsyncIterator<String>>;
+  avatarColor: () => Promise<AsyncIterator<String>>;
+  frequency: () => Promise<AsyncIterator<HabitFrequency>>;
+  weeklyCount: () => Promise<AsyncIterator<Int>>;
+  weeklySchedule: () => Promise<AsyncIterator<HabitSchedule>>;
+  health: () => Promise<AsyncIterator<Float>>;
+}
+
+export interface Avatar {
+  id: ID_Output;
+  name: String;
+  color: String;
+}
+
+export interface AvatarPromise extends Promise<Avatar>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+  color: () => Promise<String>;
+}
+
+export interface AvatarSubscription
+  extends Promise<AsyncIterator<Avatar>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
+  color: () => Promise<AsyncIterator<String>>;
+}
+
+export interface HabitSubscriptionPayload {
+  mutation: MutationType;
+  node: Habit;
+  updatedFields: String[];
+  previousValues: HabitPreviousValues;
+}
+
+export interface HabitSubscriptionPayloadPromise
+  extends Promise<HabitSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = HabitPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = HabitPreviousValuesPromise>() => T;
+}
+
+export interface HabitSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<HabitSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = HabitSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = HabitPreviousValuesSubscription>() => T;
+}
+
+export interface UserEdge {
+  node: User;
+  cursor: String;
+}
+
+export interface UserEdgePromise extends Promise<UserEdge>, Fragmentable {
+  node: <T = UserPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface UserEdgeSubscription
+  extends Promise<AsyncIterator<UserEdge>>,
+    Fragmentable {
+  node: <T = UserSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateActivity {
   count: Int;
 }
 
-export interface AggregateUserPromise
-  extends Promise<AggregateUser>,
+export interface AggregateActivityPromise
+  extends Promise<AggregateActivity>,
     Fragmentable {
   count: () => Promise<Int>;
 }
 
-export interface AggregateUserSubscription
-  extends Promise<AsyncIterator<AggregateUser>>,
+export interface AggregateActivitySubscription
+  extends Promise<AsyncIterator<AggregateActivity>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface User {
+  id: ID_Output;
+  email?: String;
+  name: String;
+  timezone?: String;
+}
+
+export interface UserPromise extends Promise<User>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  email: () => Promise<String>;
+  name: () => Promise<String>;
+  timezone: () => Promise<String>;
+  habits: <T = FragmentableArray<Habit>>(
+    args?: {
+      where?: HabitWhereInput;
+      orderBy?: HabitOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+}
+
+export interface UserSubscription
+  extends Promise<AsyncIterator<User>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  email: () => Promise<AsyncIterator<String>>;
+  name: () => Promise<AsyncIterator<String>>;
+  timezone: () => Promise<AsyncIterator<String>>;
+  habits: <T = Promise<AsyncIterator<HabitSubscription>>>(
+    args?: {
+      where?: HabitWhereInput;
+      orderBy?: HabitOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+}
+
+export interface ActivityEdge {
+  node: Activity;
+  cursor: String;
+}
+
+export interface ActivityEdgePromise
+  extends Promise<ActivityEdge>,
+    Fragmentable {
+  node: <T = ActivityPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface ActivityEdgeSubscription
+  extends Promise<AsyncIterator<ActivityEdge>>,
+    Fragmentable {
+  node: <T = ActivitySubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface HabitEdge {
+  node: Habit;
+  cursor: String;
+}
+
+export interface HabitEdgePromise extends Promise<HabitEdge>, Fragmentable {
+  node: <T = HabitPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface HabitEdgeSubscription
+  extends Promise<AsyncIterator<HabitEdge>>,
+    Fragmentable {
+  node: <T = HabitSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface PageInfo {
+  hasNextPage: Boolean;
+  hasPreviousPage: Boolean;
+  startCursor?: String;
+  endCursor?: String;
+}
+
+export interface PageInfoPromise extends Promise<PageInfo>, Fragmentable {
+  hasNextPage: () => Promise<Boolean>;
+  hasPreviousPage: () => Promise<Boolean>;
+  startCursor: () => Promise<String>;
+  endCursor: () => Promise<String>;
+}
+
+export interface PageInfoSubscription
+  extends Promise<AsyncIterator<PageInfo>>,
+    Fragmentable {
+  hasNextPage: () => Promise<AsyncIterator<Boolean>>;
+  hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
+  startCursor: () => Promise<AsyncIterator<String>>;
+  endCursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface BatchPayload {
@@ -212,39 +1257,243 @@ export interface BatchPayloadSubscription
   count: () => Promise<AsyncIterator<Long>>;
 }
 
-export interface UserPreviousValues {
+export interface Activity {
   id: ID_Output;
-  name: String;
+  timestamp: Int;
 }
 
-export interface UserPreviousValuesPromise
-  extends Promise<UserPreviousValues>,
+export interface ActivityPromise extends Promise<Activity>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  user: <T = UserPromise>() => T;
+  habit: <T = HabitPromise>() => T;
+  timestamp: () => Promise<Int>;
+}
+
+export interface ActivitySubscription
+  extends Promise<AsyncIterator<Activity>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  user: <T = UserSubscription>() => T;
+  habit: <T = HabitSubscription>() => T;
+  timestamp: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface AggregateAvatar {
+  count: Int;
+}
+
+export interface AggregateAvatarPromise
+  extends Promise<AggregateAvatar>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateAvatarSubscription
+  extends Promise<AsyncIterator<AggregateAvatar>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface ActivitySubscriptionPayload {
+  mutation: MutationType;
+  node: Activity;
+  updatedFields: String[];
+  previousValues: ActivityPreviousValues;
+}
+
+export interface ActivitySubscriptionPayloadPromise
+  extends Promise<ActivitySubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = ActivityPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = ActivityPreviousValuesPromise>() => T;
+}
+
+export interface ActivitySubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<ActivitySubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = ActivitySubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = ActivityPreviousValuesSubscription>() => T;
+}
+
+export interface AggregateUser {
+  count: Int;
+}
+
+export interface AggregateUserPromise
+  extends Promise<AggregateUser>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateUserSubscription
+  extends Promise<AsyncIterator<AggregateUser>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface AggregateHabit {
+  count: Int;
+}
+
+export interface AggregateHabitPromise
+  extends Promise<AggregateHabit>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateHabitSubscription
+  extends Promise<AsyncIterator<AggregateHabit>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface AvatarPreviousValues {
+  id: ID_Output;
+  name: String;
+  color: String;
+}
+
+export interface AvatarPreviousValuesPromise
+  extends Promise<AvatarPreviousValues>,
     Fragmentable {
   id: () => Promise<ID_Output>;
   name: () => Promise<String>;
+  color: () => Promise<String>;
 }
 
-export interface UserPreviousValuesSubscription
-  extends Promise<AsyncIterator<UserPreviousValues>>,
+export interface AvatarPreviousValuesSubscription
+  extends Promise<AsyncIterator<AvatarPreviousValues>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   name: () => Promise<AsyncIterator<String>>;
+  color: () => Promise<AsyncIterator<String>>;
 }
 
-export interface UserEdge {
-  node: User;
+export interface AvatarSubscriptionPayload {
+  mutation: MutationType;
+  node: Avatar;
+  updatedFields: String[];
+  previousValues: AvatarPreviousValues;
+}
+
+export interface AvatarSubscriptionPayloadPromise
+  extends Promise<AvatarSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = AvatarPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = AvatarPreviousValuesPromise>() => T;
+}
+
+export interface AvatarSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<AvatarSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = AvatarSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = AvatarPreviousValuesSubscription>() => T;
+}
+
+export interface ActivityConnection {
+  pageInfo: PageInfo;
+  edges: ActivityEdge[];
+}
+
+export interface ActivityConnectionPromise
+  extends Promise<ActivityConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<ActivityEdge>>() => T;
+  aggregate: <T = AggregateActivityPromise>() => T;
+}
+
+export interface ActivityConnectionSubscription
+  extends Promise<AsyncIterator<ActivityConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<ActivityEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateActivitySubscription>() => T;
+}
+
+export interface ActivityPreviousValues {
+  id: ID_Output;
+  timestamp: Int;
+}
+
+export interface ActivityPreviousValuesPromise
+  extends Promise<ActivityPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  timestamp: () => Promise<Int>;
+}
+
+export interface ActivityPreviousValuesSubscription
+  extends Promise<AsyncIterator<ActivityPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  timestamp: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface HabitConnection {
+  pageInfo: PageInfo;
+  edges: HabitEdge[];
+}
+
+export interface HabitConnectionPromise
+  extends Promise<HabitConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<HabitEdge>>() => T;
+  aggregate: <T = AggregateHabitPromise>() => T;
+}
+
+export interface HabitConnectionSubscription
+  extends Promise<AsyncIterator<HabitConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<HabitEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateHabitSubscription>() => T;
+}
+
+export interface UserConnection {
+  pageInfo: PageInfo;
+  edges: UserEdge[];
+}
+
+export interface UserConnectionPromise
+  extends Promise<UserConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<UserEdge>>() => T;
+  aggregate: <T = AggregateUserPromise>() => T;
+}
+
+export interface UserConnectionSubscription
+  extends Promise<AsyncIterator<UserConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateUserSubscription>() => T;
+}
+
+export interface AvatarEdge {
+  node: Avatar;
   cursor: String;
 }
 
-export interface UserEdgePromise extends Promise<UserEdge>, Fragmentable {
-  node: <T = UserPromise>() => T;
+export interface AvatarEdgePromise extends Promise<AvatarEdge>, Fragmentable {
+  node: <T = AvatarPromise>() => T;
   cursor: () => Promise<String>;
 }
 
-export interface UserEdgeSubscription
-  extends Promise<AsyncIterator<UserEdge>>,
+export interface AvatarEdgeSubscription
+  extends Promise<AsyncIterator<AvatarEdge>>,
     Fragmentable {
-  node: <T = UserSubscription>() => T;
+  node: <T = AvatarSubscription>() => T;
   cursor: () => Promise<AsyncIterator<String>>;
 }
 
@@ -273,73 +1522,27 @@ export interface UserSubscriptionPayloadSubscription
   previousValues: <T = UserPreviousValuesSubscription>() => T;
 }
 
-export interface User {
-  id: ID_Output;
-  name: String;
-}
+/*
+The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
+*/
+export type Int = number;
 
-export interface UserPromise extends Promise<User>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-}
+/*
+The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](http://en.wikipedia.org/wiki/IEEE_floating_point). 
+*/
+export type Float = number;
 
-export interface UserSubscription
-  extends Promise<AsyncIterator<User>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  name: () => Promise<AsyncIterator<String>>;
-}
+export type Long = string;
 
-export interface UserConnection {
-  pageInfo: PageInfo;
-  edges: UserEdge[];
-}
-
-export interface UserConnectionPromise
-  extends Promise<UserConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<UserEdge>>() => T;
-  aggregate: <T = AggregateUserPromise>() => T;
-}
-
-export interface UserConnectionSubscription
-  extends Promise<AsyncIterator<UserConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateUserSubscription>() => T;
-}
-
-export interface PageInfo {
-  hasNextPage: Boolean;
-  hasPreviousPage: Boolean;
-  startCursor?: String;
-  endCursor?: String;
-}
-
-export interface PageInfoPromise extends Promise<PageInfo>, Fragmentable {
-  hasNextPage: () => Promise<Boolean>;
-  hasPreviousPage: () => Promise<Boolean>;
-  startCursor: () => Promise<String>;
-  endCursor: () => Promise<String>;
-}
-
-export interface PageInfoSubscription
-  extends Promise<AsyncIterator<PageInfo>>,
-    Fragmentable {
-  hasNextPage: () => Promise<AsyncIterator<Boolean>>;
-  hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
-  startCursor: () => Promise<AsyncIterator<String>>;
-  endCursor: () => Promise<AsyncIterator<String>>;
-}
+/*
+The `Boolean` scalar type represents `true` or `false`.
+*/
+export type Boolean = boolean;
 
 /*
 The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
 */
 export type String = string;
-
-export type Long = string;
 
 /*
 The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.
@@ -347,21 +1550,31 @@ The `ID` scalar type represents a unique identifier, often used to refetch an ob
 export type ID_Input = string | number;
 export type ID_Output = string;
 
-/*
-The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
-*/
-export type Int = number;
-
-/*
-The `Boolean` scalar type represents `true` or `false`.
-*/
-export type Boolean = boolean;
-
 /**
  * Model Metadata
  */
 
 export const models: Model[] = [
+  {
+    name: "Activity",
+    embedded: false
+  },
+  {
+    name: "Avatar",
+    embedded: false
+  },
+  {
+    name: "Habit",
+    embedded: false
+  },
+  {
+    name: "HabitFrequency",
+    embedded: false
+  },
+  {
+    name: "HabitSchedule",
+    embedded: false
+  },
   {
     name: "User",
     embedded: false
