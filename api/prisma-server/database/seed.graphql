@@ -1,0 +1,17 @@
+mutation {
+  a1: createAvatar(data: { name: "Habbit", color: "#FF5555" }) {
+    id
+  }
+  a2: createAvatar(data: { name: "Bobbit", color: "#FFA500" }) {
+    id
+  }
+  a3: createAvatar(data: { name: "Ribbit", color: "#008002" }) {
+    id
+  }
+  a4: createAvatar(data: { name: "Pebbit", color: "#FFC0CB" }) {
+    id
+  }
+  a5: createAvatar(data: { name: "Zibbit", color: "#2800FF" }) {
+    id
+  }
+}

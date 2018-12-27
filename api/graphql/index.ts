@@ -9,6 +9,9 @@ const resolvers = {
   Query: {
     user(parent, args, context: Context) {
       return context.prisma.user({ id: args.id });
+    },
+    avatars(parent, args, context: Context) {
+      return context.prisma.avatars();
     }
   },
   Mutation: {
@@ -26,6 +29,7 @@ const resolvers = {
 const typeDefs = `
 type Query {
   user(id: ID!): User
+  avatars: [Avatar!]!
 }
 
 type Mutation {
@@ -47,6 +51,13 @@ type Habit {
   avatarName: String!
   avatarColor: String!
 }
+
+type Avatar {
+  id: ID!
+  name: String!
+  color: String!
+}
+
 `;
 const server = new GraphQLServer({
   typeDefs, //: "./schema.graphql",

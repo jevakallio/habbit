@@ -5,3 +5,5 @@ datamodel: datamodel.prisma
 generate:
   - generator: typescript-client
     output: ../graphql/prisma-client/
+seed:
+  import: database/seed.graphql
