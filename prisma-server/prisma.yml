@@ -1,0 +1,7 @@
+#endpoint: http://localhost:4466
+endpoint: https://eu1.prisma.sh/jani-evakallio-e68219/habbit/dev
+datamodel: datamodel.prisma
+
+generate:
+  - generator: typescript-client
+    output: ../prisma-client/
