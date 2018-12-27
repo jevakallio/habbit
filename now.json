@@ -4,6 +4,10 @@
     {
       "src": "package.json",
       "use": "@now/next"
+    },
+    {
+      "src": "api/*/index.ts",
+      "use": "@now/node@canary"
     }
   ]
 }

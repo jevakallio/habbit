@@ -4,4 +4,4 @@ datamodel: datamodel.prisma
 
 generate:
   - generator: typescript-client
-    output: ../prisma-client/
+    output: ../api/graphql/prisma-client/
