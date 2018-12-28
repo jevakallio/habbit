@@ -1,4 +1,4 @@
-export const FormError = ({ children }) => <div>{children}</div>;
+import { FormError } from "./FormError";
 
 export const FormGroup = ({
   name,
@@ -11,8 +11,8 @@ export const FormGroup = ({
 }) => (
   <div className={`FormGroup ${enabled ? "" : "disabled"}`}>
     <label htmlFor={name}>{label}</label>
+    {errors[name] && touched[name] && <FormError>{errors[name]}</FormError>}
     {children}
-    {errors[name] && touched[name] && <FormError>{errors.task}</FormError>}
     <style jsx>{`
       .FormGroup {
         display: flex;
