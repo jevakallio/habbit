@@ -12,13 +12,21 @@
   },
   "dependencies": {
     "@zeit/next-typescript": "^1.1.1",
+    "apollo-boost": "^0.1.23",
     "formik": "^1.4.1",
+    "graphql": "^14.0.2",
+    "graphql-tag": "^2.10.0",
+    "isomorphic-unfetch": "^3.0.0",
     "next": "^7.0.2",
     "react": "^16.6.0",
+    "react-apollo": "^2.3.3",
     "react-dom": "^16.6.0"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0-0",
-    "next-server": "^0.0.1"
+    "next-server": "^0.0.1",
+    "tslint": "^5.12.0",
+    "tslint-react": "^3.6.0",
+    "typescript": "^3.2.2"
   }
 }
