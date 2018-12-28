@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: habbit-prisma
+  labels:
+    app: habbit-prisma
+spec:
+  selector:
+    matchLabels:
+      app: habbit-prisma
+  template:
+    metadata:
+      labels:
+        app: habbit-prisma
+    spec:
+      containers:
+        - name: prisma
+          image: prismagraphql/prisma:1.23
+          ports:
+            - containerPort: 4466
+          # The following environment variables will contain the database host,
+          # user and password to connect to the PostgreSQL instance.
+          env:
+            - name: POSTGRES_DB_HOST
+              value: 127.0.0.1:5432
+            # [START cloudsql_secrets]
+            - name: POSTGRES_DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: username
+            - name: POSTGRES_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: password
+            - name: PRISMA_CONFIG
+              value: |
+                port: 4466
+                databases:
+                  default:
+                    connector: postgres
+                    host: 127.0.0.1
+                    database: habbit
+                    user: postgres
+                    password: @TODO_MOVE_TO_CONFIG
+                    rawAccess: true
+                    port: '5432'
+                    migrations: true
+            # [END cloudsql_secrets]
+        # Change <INSTANCE_CONNECTION_NAME> here to include your GCP
+        # project, the region of your Cloud SQL instance and the name
+        # of your Cloud SQL instance. The format is
+        # $PROJECT:$REGION:$INSTANCE
+        # [START proxy_container]
+        - name: cloudsql-proxy
+          image: gcr.io/cloudsql-docker/gce-proxy:1.11
+          command:
+            [
+              "/cloud_sql_proxy",
+              "-instances=habbit:europe-west1:habbit=tcp:5432",
+              "-credential_file=/secrets/cloudsql/credentials.json",
+            ]
+          # [START cloudsql_security_context]
+          securityContext:
+            runAsUser: 2 # non-root user
+            allowPrivilegeEscalation: false
+          # [END cloudsql_security_context]
+          volumeMounts:
+            - name: instance-credentials
+              mountPath: /secrets/cloudsql
+              readOnly: true
+        # [END proxy_container]
+      # [START volumes]
+      volumes:
+        - name: instance-credentials
+          secret:
+            secretName: instance-credentials
+      # [END volumes]
