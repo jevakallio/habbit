@@ -1,5 +1,8 @@
 import Head from "next/head";
-const Layout = ({ children }) => (
+import Header from "./Header";
+import Content from "./Content";
+
+const Layout = ({ children, header = true }) => (
   <div>
     <Head>
       <title>Habbit</title>
@@ -10,13 +13,20 @@ const Layout = ({ children }) => (
         type="text/css"
         href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"
       />
-      <style>{`
+      <style type="text/css">{`
+        html {
+          box-sizing: border-box;
+        }
         body {
-          background-color: #133bfe;
+          font-family: "Helvetica Neue", Helvetica, "Liberation Sans", Roboto, Arial, sans-serif;
+        }
+        *, *:before, *:after {
+          box-sizing: inherit;
         }
       `}</style>
     </Head>
-    {children}
+    {header && <Header />}
+    {header ? <Content>{children}</Content> : children}
   </div>
 );
 

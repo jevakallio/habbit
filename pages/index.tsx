@@ -1,7 +1,7 @@
 import Teaser from "../components/Teaser";
 import Layout from "../components/Layout";
 const Index = () => (
-  <Layout>
+  <Layout header={false}>
     <Teaser />
   </Layout>
 );
