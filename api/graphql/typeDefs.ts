@@ -1,16 +1,11 @@
+// @TODO, convert to a .graphql file
+export const typeDefs = `
 type User {
-  id: ID! @unique
-  email: String @unique
+  id: ID!
   name: String!
+  email: String
   timezone: String
-  habits: [Habit!]! # user has habits
-}
-
-enum HabitFrequency {
-  DAILY
-  WEEKLY
-  DAYS_PER_WEEK
-  COUNT_PER_WEEK
+  habits: [Habit!]!
 }
 
 enum HabitSchedule {
@@ -23,28 +18,28 @@ enum HabitSchedule {
   SUNDAY
 }
 
+enum HabitFrequency {
+  DAILY
+  WEEKLY
+  DAYS_PER_WEEK
+  COUNT_PER_WEEK
+}
+
 type Habit {
-  id: ID! @unique
+  id: ID!
   task: String!
-  active: Boolean! @default(value: "true")
+  active: Boolean!
   avatarName: String!
   avatarColor: String!
   frequency: HabitFrequency!
   weeklyCount: Int
   weeklySchedule: [HabitSchedule!]!
-  health: Float! @default(value: "1") # 0...1
+  health: Float! # 0...1
   user: User! # habit belongs to a user
 }
 
-type Activity {
-  id: ID! @unique
-  user: User!
-  habit: Habit!
-  timestamp: Int!
-}
-
 type Avatar {
-  id: ID! @unique
+  id: ID!
   name: String!
   color: String!
-}
+}`;

@@ -249,7 +249,7 @@ type Habit {
   avatarColor: String!
   frequency: HabitFrequency!
   weeklyCount: Int
-  weeklySchedule: HabitSchedule
+  weeklySchedule: [HabitSchedule!]!
   health: Float!
   user: User!
 }
@@ -267,8 +267,8 @@ input HabitCreateInput {
   avatarColor: String!
   frequency: HabitFrequency!
   weeklyCount: Int
-  weeklySchedule: HabitSchedule
-  health: Float!
+  weeklySchedule: HabitCreateweeklyScheduleInput
+  health: Float
   user: UserCreateOneWithoutHabitsInput!
 }
 
@@ -282,6 +282,10 @@ input HabitCreateOneInput {
   connect: HabitWhereUniqueInput
 }
 
+input HabitCreateweeklyScheduleInput {
+  set: [HabitSchedule!]
+}
+
 input HabitCreateWithoutUserInput {
   task: String!
   active: Boolean
@@ -289,8 +293,8 @@ input HabitCreateWithoutUserInput {
   avatarColor: String!
   frequency: HabitFrequency!
   weeklyCount: Int
-  weeklySchedule: HabitSchedule
-  health: Float!
+  weeklySchedule: HabitCreateweeklyScheduleInput
+  health: Float
 }
 
 type HabitEdge {
@@ -302,7 +306,7 @@ enum HabitFrequency {
   DAILY
   WEEKLY
   DAYS_PER_WEEK
-  COUNT_PER_WEER
+  COUNT_PER_WEEK
 }
 
 enum HabitOrderByInput {
@@ -320,8 +324,6 @@ enum HabitOrderByInput {
   frequency_DESC
   weeklyCount_ASC
   weeklyCount_DESC
-  weeklySchedule_ASC
-  weeklySchedule_DESC
   health_ASC
   health_DESC
   createdAt_ASC
@@ -338,7 +340,7 @@ type HabitPreviousValues {
   avatarColor: String!
   frequency: HabitFrequency!
   weeklyCount: Int
-  weeklySchedule: HabitSchedule
+  weeklySchedule: [HabitSchedule!]!
   health: Float!
 }
 
@@ -413,10 +415,6 @@ input HabitScalarWhereInput {
   weeklyCount_lte: Int
   weeklyCount_gt: Int
   weeklyCount_gte: Int
-  weeklySchedule: HabitSchedule
-  weeklySchedule_not: HabitSchedule
-  weeklySchedule_in: [HabitSchedule!]
-  weeklySchedule_not_in: [HabitSchedule!]
   health: Float
   health_not: Float
   health_in: [Float!]
@@ -465,7 +463,7 @@ input HabitUpdateDataInput {
   avatarColor: String
   frequency: HabitFrequency
   weeklyCount: Int
-  weeklySchedule: HabitSchedule
+  weeklySchedule: HabitUpdateweeklyScheduleInput
   health: Float
   user: UserUpdateOneRequiredWithoutHabitsInput
 }
@@ -477,7 +475,7 @@ input HabitUpdateInput {
   avatarColor: String
   frequency: HabitFrequency
   weeklyCount: Int
-  weeklySchedule: HabitSchedule
+  weeklySchedule: HabitUpdateweeklyScheduleInput
   health: Float
   user: UserUpdateOneRequiredWithoutHabitsInput
 }
@@ -489,7 +487,7 @@ input HabitUpdateManyDataInput {
   avatarColor: String
   frequency: HabitFrequency
   weeklyCount: Int
-  weeklySchedule: HabitSchedule
+  weeklySchedule: HabitUpdateweeklyScheduleInput
   health: Float
 }
 
@@ -500,7 +498,7 @@ input HabitUpdateManyMutationInput {
   avatarColor: String
   frequency: HabitFrequency
   weeklyCount: Int
-  weeklySchedule: HabitSchedule
+  weeklySchedule: HabitUpdateweeklyScheduleInput
   health: Float
 }
 
@@ -527,6 +525,10 @@ input HabitUpdateOneRequiredInput {
   connect: HabitWhereUniqueInput
 }
 
+input HabitUpdateweeklyScheduleInput {
+  set: [HabitSchedule!]
+}
+
 input HabitUpdateWithoutUserDataInput {
   task: String
   active: Boolean
@@ -534,7 +536,7 @@ input HabitUpdateWithoutUserDataInput {
   avatarColor: String
   frequency: HabitFrequency
   weeklyCount: Int
-  weeklySchedule: HabitSchedule
+  weeklySchedule: HabitUpdateweeklyScheduleInput
   health: Float
 }
 
@@ -625,10 +627,6 @@ input HabitWhereInput {
   weeklyCount_lte: Int
   weeklyCount_gt: Int
   weeklyCount_gte: Int
-  weeklySchedule: HabitSchedule
-  weeklySchedule_not: HabitSchedule
-  weeklySchedule_in: [HabitSchedule!]
-  weeklySchedule_not_in: [HabitSchedule!]
   health: Float
   health_not: Float
   health_in: [Float!]

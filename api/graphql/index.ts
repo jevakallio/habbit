@@ -1,9 +1,33 @@
 import { prisma, Prisma } from "./prisma-client";
 import { GraphQLServer } from "graphql-yoga";
+import { typeDefs } from "./typeDefs";
+import { findAddedNonNullDirectiveArgs } from "graphql/utilities/findBreakingChanges";
 
 type Context = {
   prisma: Prisma;
 };
+
+const queryDefs = `
+  type Query {
+    user(id: ID!): User
+    avatars: [Avatar!]!
+  }
+
+  input HabitCreateInput {
+    task: String!
+    avatarName: String!
+    avatarColor: String!
+    frequency: HabitFrequency!
+    weeklyCount: Int
+    weeklySchedule: [HabitSchedule!]
+    user: ID!
+  }
+
+  type Mutation {
+    createUser(name: String!): User
+    createHabit(data: HabitCreateInput!): Habit
+  }
+`;
 
 const resolvers = {
   Query: {
@@ -17,6 +41,18 @@ const resolvers = {
   Mutation: {
     createUser(parent, args, context: Context) {
       return context.prisma.createUser({ name: args.name, email: args.email });
+    },
+    createHabit(parent, args, context: Context) {
+      const { user, weeklySchedule, ...habit } = args.data;
+      return context.prisma.createHabit({
+        ...habit,
+        user: {
+          connect: { id: user }
+        },
+        weeklySchedule: {
+          set: weeklySchedule
+        }
+      });
     }
   },
   User: {
@@ -26,41 +62,11 @@ const resolvers = {
   }
 };
 
-const typeDefs = `
-type Query {
-  user(id: ID!): User
-  avatars: [Avatar!]!
-}
-
-type Mutation {
-  createUser(name: String!): User
-}
-
-type User {
-  id: ID!
-  name: String!
-  email: String
-  timezone: String
-  habits: [Habit!]!
-}
-
-type Habit {
-  id: ID!
-  task: String!
-  active: Boolean!
-  avatarName: String!
-  avatarColor: String!
-}
-
-type Avatar {
-  id: ID!
-  name: String!
-  color: String!
-}
-
-`;
 const server = new GraphQLServer({
-  typeDefs, //: "./schema.graphql",
+  typeDefs: `
+    ${queryDefs}
+    ${typeDefs}
+  `,
   resolvers,
   context: {
     prisma
