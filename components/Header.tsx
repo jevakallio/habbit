@@ -1,6 +1,30 @@
 import Head from "next/head";
+import { Query } from "react-apollo";
+import gql from "graphql-tag";
 import Logo from "./Logo";
 import { colors, layout } from "../theme";
+
+const UserQuery = gql`
+  {
+    user(id: "cjq6mfok7sb260a985wz7qsn5") {
+      id
+      name
+      email
+    }
+  }
+`;
+
+const UserDisplay = ({ children }) => (
+  <div className="Name">
+    {children}
+    <style jsx>{`
+      .Name {
+        color: ${colors.white};
+        font-weight: bold;
+      }
+    `}</style>
+  </div>
+);
 
 const Header = ({ children }) => (
   <header className="HeaderBar">
@@ -8,7 +32,19 @@ const Header = ({ children }) => (
       <div className="Logo">
         <Logo title="Habbit" />
       </div>
-      Hi
+      <Query query={UserQuery}>
+        {({ loading, error, data }) => {
+          if (error) {
+            console.error(error);
+            return <UserDisplay>:(</UserDisplay>;
+          }
+          if (!data || (!data.user && loading)) {
+            return <UserDisplay>...</UserDisplay>;
+          }
+
+          return <UserDisplay>{data.user.name}</UserDisplay>;
+        }}
+      </Query>
     </div>
     <style jsx={true}>{`
       .HeaderBar {
