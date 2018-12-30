@@ -34,13 +34,14 @@ type Habit {
   weeklySchedule: [HabitSchedule!]!
   health: Float! @default(value: "1") # 0...1
   user: User! # habit belongs to a user
+  activity: [Activity!]!
 }
 
 type Activity {
   id: ID! @unique
   user: User!
   habit: Habit!
-  timestamp: Int!
+  timestamp: DateTime!
 }
 
 type Avatar {

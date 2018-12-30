@@ -2,7 +2,7 @@ export const typeDefs = /* GraphQL */ `type Activity {
   id: ID!
   user: User!
   habit: Habit!
-  timestamp: Int!
+  timestamp: DateTime!
 }
 
 type ActivityConnection {
@@ -13,8 +13,18 @@ type ActivityConnection {
 
 input ActivityCreateInput {
   user: UserCreateOneInput!
-  habit: HabitCreateOneInput!
-  timestamp: Int!
+  habit: HabitCreateOneWithoutActivityInput!
+  timestamp: DateTime!
+}
+
+input ActivityCreateManyWithoutHabitInput {
+  create: [ActivityCreateWithoutHabitInput!]
+  connect: [ActivityWhereUniqueInput!]
+}
+
+input ActivityCreateWithoutHabitInput {
+  user: UserCreateOneInput!
+  timestamp: DateTime!
 }
 
 type ActivityEdge {
@@ -35,7 +45,35 @@ enum ActivityOrderByInput {
 
 type ActivityPreviousValues {
   id: ID!
-  timestamp: Int!
+  timestamp: DateTime!
+}
+
+input ActivityScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  timestamp: DateTime
+  timestamp_not: DateTime
+  timestamp_in: [DateTime!]
+  timestamp_not_in: [DateTime!]
+  timestamp_lt: DateTime
+  timestamp_lte: DateTime
+  timestamp_gt: DateTime
+  timestamp_gte: DateTime
+  AND: [ActivityScalarWhereInput!]
+  OR: [ActivityScalarWhereInput!]
+  NOT: [ActivityScalarWhereInput!]
 }
 
 type ActivitySubscriptionPayload {
@@ -58,12 +96,48 @@ input ActivitySubscriptionWhereInput {
 
 input ActivityUpdateInput {
   user: UserUpdateOneRequiredInput
-  habit: HabitUpdateOneRequiredInput
-  timestamp: Int
+  habit: HabitUpdateOneRequiredWithoutActivityInput
+  timestamp: DateTime
+}
+
+input ActivityUpdateManyDataInput {
+  timestamp: DateTime
 }
 
 input ActivityUpdateManyMutationInput {
-  timestamp: Int
+  timestamp: DateTime
+}
+
+input ActivityUpdateManyWithoutHabitInput {
+  create: [ActivityCreateWithoutHabitInput!]
+  delete: [ActivityWhereUniqueInput!]
+  connect: [ActivityWhereUniqueInput!]
+  disconnect: [ActivityWhereUniqueInput!]
+  update: [ActivityUpdateWithWhereUniqueWithoutHabitInput!]
+  upsert: [ActivityUpsertWithWhereUniqueWithoutHabitInput!]
+  deleteMany: [ActivityScalarWhereInput!]
+  updateMany: [ActivityUpdateManyWithWhereNestedInput!]
+}
+
+input ActivityUpdateManyWithWhereNestedInput {
+  where: ActivityScalarWhereInput!
+  data: ActivityUpdateManyDataInput!
+}
+
+input ActivityUpdateWithoutHabitDataInput {
+  user: UserUpdateOneRequiredInput
+  timestamp: DateTime
+}
+
+input ActivityUpdateWithWhereUniqueWithoutHabitInput {
+  where: ActivityWhereUniqueInput!
+  data: ActivityUpdateWithoutHabitDataInput!
+}
+
+input ActivityUpsertWithWhereUniqueWithoutHabitInput {
+  where: ActivityWhereUniqueInput!
+  update: ActivityUpdateWithoutHabitDataInput!
+  create: ActivityCreateWithoutHabitInput!
 }
 
 input ActivityWhereInput {
@@ -83,14 +157,14 @@ input ActivityWhereInput {
   id_not_ends_with: ID
   user: UserWhereInput
   habit: HabitWhereInput
-  timestamp: Int
-  timestamp_not: Int
-  timestamp_in: [Int!]
-  timestamp_not_in: [Int!]
-  timestamp_lt: Int
-  timestamp_lte: Int
-  timestamp_gt: Int
-  timestamp_gte: Int
+  timestamp: DateTime
+  timestamp_not: DateTime
+  timestamp_in: [DateTime!]
+  timestamp_not_in: [DateTime!]
+  timestamp_lt: DateTime
+  timestamp_lte: DateTime
+  timestamp_gt: DateTime
+  timestamp_gte: DateTime
   AND: [ActivityWhereInput!]
   OR: [ActivityWhereInput!]
   NOT: [ActivityWhereInput!]
@@ -241,6 +315,8 @@ type BatchPayload {
   count: Long!
 }
 
+scalar DateTime
+
 type Habit {
   id: ID!
   task: String!
@@ -252,6 +328,7 @@ type Habit {
   weeklySchedule: [HabitSchedule!]!
   health: Float!
   user: User!
+  activity(where: ActivityWhereInput, orderBy: ActivityOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Activity!]
 }
 
 type HabitConnection {
@@ -270,6 +347,7 @@ input HabitCreateInput {
   weeklySchedule: HabitCreateweeklyScheduleInput
   health: Float
   user: UserCreateOneWithoutHabitsInput!
+  activity: ActivityCreateManyWithoutHabitInput
 }
 
 input HabitCreateManyWithoutUserInput {
@@ -277,13 +355,25 @@ input HabitCreateManyWithoutUserInput {
   connect: [HabitWhereUniqueInput!]
 }
 
-input HabitCreateOneInput {
-  create: HabitCreateInput
+input HabitCreateOneWithoutActivityInput {
+  create: HabitCreateWithoutActivityInput
   connect: HabitWhereUniqueInput
 }
 
 input HabitCreateweeklyScheduleInput {
   set: [HabitSchedule!]
+}
+
+input HabitCreateWithoutActivityInput {
+  task: String!
+  active: Boolean
+  avatarName: String!
+  avatarColor: String!
+  frequency: HabitFrequency!
+  weeklyCount: Int
+  weeklySchedule: HabitCreateweeklyScheduleInput
+  health: Float
+  user: UserCreateOneWithoutHabitsInput!
 }
 
 input HabitCreateWithoutUserInput {
@@ -295,6 +385,7 @@ input HabitCreateWithoutUserInput {
   weeklyCount: Int
   weeklySchedule: HabitCreateweeklyScheduleInput
   health: Float
+  activity: ActivityCreateManyWithoutHabitInput
 }
 
 type HabitEdge {
@@ -456,18 +547,6 @@ input HabitSubscriptionWhereInput {
   NOT: [HabitSubscriptionWhereInput!]
 }
 
-input HabitUpdateDataInput {
-  task: String
-  active: Boolean
-  avatarName: String
-  avatarColor: String
-  frequency: HabitFrequency
-  weeklyCount: Int
-  weeklySchedule: HabitUpdateweeklyScheduleInput
-  health: Float
-  user: UserUpdateOneRequiredWithoutHabitsInput
-}
-
 input HabitUpdateInput {
   task: String
   active: Boolean
@@ -478,6 +557,7 @@ input HabitUpdateInput {
   weeklySchedule: HabitUpdateweeklyScheduleInput
   health: Float
   user: UserUpdateOneRequiredWithoutHabitsInput
+  activity: ActivityUpdateManyWithoutHabitInput
 }
 
 input HabitUpdateManyDataInput {
@@ -518,15 +598,27 @@ input HabitUpdateManyWithWhereNestedInput {
   data: HabitUpdateManyDataInput!
 }
 
-input HabitUpdateOneRequiredInput {
-  create: HabitCreateInput
-  update: HabitUpdateDataInput
-  upsert: HabitUpsertNestedInput
+input HabitUpdateOneRequiredWithoutActivityInput {
+  create: HabitCreateWithoutActivityInput
+  update: HabitUpdateWithoutActivityDataInput
+  upsert: HabitUpsertWithoutActivityInput
   connect: HabitWhereUniqueInput
 }
 
 input HabitUpdateweeklyScheduleInput {
   set: [HabitSchedule!]
+}
+
+input HabitUpdateWithoutActivityDataInput {
+  task: String
+  active: Boolean
+  avatarName: String
+  avatarColor: String
+  frequency: HabitFrequency
+  weeklyCount: Int
+  weeklySchedule: HabitUpdateweeklyScheduleInput
+  health: Float
+  user: UserUpdateOneRequiredWithoutHabitsInput
 }
 
 input HabitUpdateWithoutUserDataInput {
@@ -538,6 +630,7 @@ input HabitUpdateWithoutUserDataInput {
   weeklyCount: Int
   weeklySchedule: HabitUpdateweeklyScheduleInput
   health: Float
+  activity: ActivityUpdateManyWithoutHabitInput
 }
 
 input HabitUpdateWithWhereUniqueWithoutUserInput {
@@ -545,9 +638,9 @@ input HabitUpdateWithWhereUniqueWithoutUserInput {
   data: HabitUpdateWithoutUserDataInput!
 }
 
-input HabitUpsertNestedInput {
-  update: HabitUpdateDataInput!
-  create: HabitCreateInput!
+input HabitUpsertWithoutActivityInput {
+  update: HabitUpdateWithoutActivityDataInput!
+  create: HabitCreateWithoutActivityInput!
 }
 
 input HabitUpsertWithWhereUniqueWithoutUserInput {
@@ -636,6 +729,9 @@ input HabitWhereInput {
   health_gt: Float
   health_gte: Float
   user: UserWhereInput
+  activity_every: ActivityWhereInput
+  activity_some: ActivityWhereInput
+  activity_none: ActivityWhereInput
   AND: [HabitWhereInput!]
   OR: [HabitWhereInput!]
   NOT: [HabitWhereInput!]

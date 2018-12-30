@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Header from "./Header";
 import Content from "./Content";
-
+import { BirdsWorld } from "./BirdsEye";
 const Layout = ({ children, header = true }) => (
   <div>
     <Head>
@@ -25,8 +25,10 @@ const Layout = ({ children, header = true }) => (
         }
       `}</style>
     </Head>
-    {header && <Header />}
-    {header ? <Content>{children}</Content> : children}
+    <BirdsWorld>
+      {header && <Header />}
+      {header ? <Content>{children}</Content> : children}
+    </BirdsWorld>
   </div>
 );
 

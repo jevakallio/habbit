@@ -1,7 +1,7 @@
 import React from "react";
 import { BirdsEye } from "./BirdsEye";
 const Bird = ({ title, color = "#F55", ...props }) => (
-  <svg viewBox="0 0 442 556" {...props}>
+  <svg viewBox="0 0 442 556" preserveAspectRatio="none" {...props}>
     <title>{title}</title>
     <g fill="none" fillRule="evenodd">
       <g transform="matrix(-1 0 0 1 384 0)">

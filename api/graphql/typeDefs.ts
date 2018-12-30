@@ -1,5 +1,7 @@
 // @TODO, convert to a .graphql file
 export const typeDefs = `
+scalar DateTime
+
 type User {
   id: ID!
   name: String!
@@ -36,6 +38,12 @@ type Habit {
   weeklySchedule: [HabitSchedule!]!
   health: Float! # 0...1
   user: User! # habit belongs to a user
+  activity: [Activity!]!
+}
+
+type Activity {
+  id: ID!
+  timestamp: DateTime!
 }
 
 type Avatar {

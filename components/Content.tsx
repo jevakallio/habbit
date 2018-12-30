@@ -12,7 +12,7 @@ const Content = ({ children }) => (
       }
 
       .Gutter {
-        margin: 0 20px;
+        margin: 20px;
       }
     `}</style>
   </div>

@@ -2,6 +2,7 @@
   "extends": ["tslint:latest", "tslint-react"],
   "rules": {
     // override tslint-react rules here
+    "interface-name": false,
     "trailing-comma": false,
     "ordered-imports": false,
     "object-literal-sort-keys": false,

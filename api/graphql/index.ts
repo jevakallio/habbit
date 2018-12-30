@@ -1,15 +1,16 @@
 import { prisma, Prisma } from "./prisma-client";
 import { GraphQLServer } from "graphql-yoga";
 import { typeDefs } from "./typeDefs";
-import { findAddedNonNullDirectiveArgs } from "graphql/utilities/findBreakingChanges";
+import { GraphQLError } from "graphql";
 
-type Context = {
+interface Context {
   prisma: Prisma;
-};
+}
 
 const queryDefs = `
   type Query {
     user(id: ID!): User
+    habit(id: ID!): Habit
     avatars: [Avatar!]!
   }
 
@@ -26,6 +27,7 @@ const queryDefs = `
   type Mutation {
     createUser(name: String!): User
     createHabit(data: HabitCreateInput!): Habit
+    createActivity(user: ID!, habit: ID!): Activity!
   }
 `;
 
@@ -33,6 +35,10 @@ const resolvers = {
   Query: {
     user(parent, args, context: Context) {
       return context.prisma.user({ id: args.id });
+    },
+    habit(parent, args, context: Context) {
+      // @TODO Authenticate
+      return context.prisma.habit({ id: args.id });
     },
     avatars(parent, args, context: Context) {
       return context.prisma.avatars();
@@ -53,11 +59,54 @@ const resolvers = {
           set: weeklySchedule
         }
       });
+    },
+    async createActivity(parent, args, context: Context) {
+      const { user, habit } = args;
+      const timestamp = new Date().toISOString();
+
+      const lastActivities = await context.prisma.activities({
+        where: {
+          user: { id: user },
+          habit: { id: habit }
+        },
+        orderBy: "createdAt_DESC",
+        first: 1
+      });
+
+      // check if an activity is already created for today
+      // @TODO: Improve this to account for time zone
+      const last = lastActivities && lastActivities[0];
+      if (last && last.timestamp.split("T")[0] === timestamp.split("T")[0]) {
+        throw new GraphQLError(
+          "You've already logged an activity for today. Come back tomorrow."
+        );
+      }
+
+      return context.prisma.createActivity({
+        timestamp,
+        user: {
+          connect: { id: user }
+        },
+        habit: {
+          connect: { id: habit }
+        }
+      });
     }
   },
   User: {
     habits(parent, args, context: Context) {
       return context.prisma.user({ id: parent.id }).habits();
+    }
+  },
+  Habit: {
+    user(parent, args, context: Context) {
+      return context.prisma.habit({ id: parent.id }).user();
+    },
+    activity(parent, args, context: Context) {
+      return context.prisma.habit({ id: parent.id }).activity({
+        orderBy: "createdAt_DESC",
+        first: 30
+      });
     }
   }
 };
