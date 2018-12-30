@@ -1,7 +1,11 @@
 type User {
   id: ID! @unique
-  email: String @unique
-  name: String!
+  email: String! @unique
+  authId: String! @unique #auth0|..., twitter|..., google|...
+  name: String! # display name
+  firstName: String
+  lastName: String
+  picture: String
   timezone: String
   habits: [Habit!]! # user has habits
 }

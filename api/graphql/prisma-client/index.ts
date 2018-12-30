@@ -296,8 +296,16 @@ export type UserOrderByInput =
   | "id_DESC"
   | "email_ASC"
   | "email_DESC"
+  | "authId_ASC"
+  | "authId_DESC"
   | "name_ASC"
   | "name_DESC"
+  | "firstName_ASC"
+  | "firstName_DESC"
+  | "lastName_ASC"
+  | "lastName_DESC"
+  | "picture_ASC"
+  | "picture_DESC"
   | "timezone_ASC"
   | "timezone_DESC"
   | "createdAt_ASC"
@@ -308,8 +316,12 @@ export type UserOrderByInput =
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
 export interface UserCreateWithoutHabitsInput {
-  email?: String;
+  email: String;
+  authId: String;
   name: String;
+  firstName?: String;
+  lastName?: String;
+  picture?: String;
   timezone?: String;
 }
 
@@ -339,8 +351,12 @@ export interface HabitUpdateWithWhereUniqueWithoutUserInput {
 }
 
 export interface UserCreateInput {
-  email?: String;
+  email: String;
+  authId: String;
   name: String;
+  firstName?: String;
+  lastName?: String;
+  picture?: String;
   timezone?: String;
   habits?: HabitCreateManyWithoutUserInput;
 }
@@ -478,7 +494,11 @@ export interface HabitCreateweeklyScheduleInput {
 
 export interface UserUpdateInput {
   email?: String;
+  authId?: String;
   name?: String;
+  firstName?: String;
+  lastName?: String;
+  picture?: String;
   timezone?: String;
   habits?: HabitUpdateManyWithoutUserInput;
 }
@@ -580,6 +600,7 @@ export interface ActivityUpdateInput {
 export type UserWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
   email?: String;
+  authId?: String;
 }>;
 
 export interface UserUpdateOneRequiredInput {
@@ -603,7 +624,11 @@ export interface HabitUpdateWithoutActivityDataInput {
 
 export interface UserUpdateDataInput {
   email?: String;
+  authId?: String;
   name?: String;
+  firstName?: String;
+  lastName?: String;
+  picture?: String;
   timezone?: String;
   habits?: HabitUpdateManyWithoutUserInput;
 }
@@ -689,6 +714,20 @@ export interface UserWhereInput {
   email_not_starts_with?: String;
   email_ends_with?: String;
   email_not_ends_with?: String;
+  authId?: String;
+  authId_not?: String;
+  authId_in?: String[] | String;
+  authId_not_in?: String[] | String;
+  authId_lt?: String;
+  authId_lte?: String;
+  authId_gt?: String;
+  authId_gte?: String;
+  authId_contains?: String;
+  authId_not_contains?: String;
+  authId_starts_with?: String;
+  authId_not_starts_with?: String;
+  authId_ends_with?: String;
+  authId_not_ends_with?: String;
   name?: String;
   name_not?: String;
   name_in?: String[] | String;
@@ -703,6 +742,48 @@ export interface UserWhereInput {
   name_not_starts_with?: String;
   name_ends_with?: String;
   name_not_ends_with?: String;
+  firstName?: String;
+  firstName_not?: String;
+  firstName_in?: String[] | String;
+  firstName_not_in?: String[] | String;
+  firstName_lt?: String;
+  firstName_lte?: String;
+  firstName_gt?: String;
+  firstName_gte?: String;
+  firstName_contains?: String;
+  firstName_not_contains?: String;
+  firstName_starts_with?: String;
+  firstName_not_starts_with?: String;
+  firstName_ends_with?: String;
+  firstName_not_ends_with?: String;
+  lastName?: String;
+  lastName_not?: String;
+  lastName_in?: String[] | String;
+  lastName_not_in?: String[] | String;
+  lastName_lt?: String;
+  lastName_lte?: String;
+  lastName_gt?: String;
+  lastName_gte?: String;
+  lastName_contains?: String;
+  lastName_not_contains?: String;
+  lastName_starts_with?: String;
+  lastName_not_starts_with?: String;
+  lastName_ends_with?: String;
+  lastName_not_ends_with?: String;
+  picture?: String;
+  picture_not?: String;
+  picture_in?: String[] | String;
+  picture_not_in?: String[] | String;
+  picture_lt?: String;
+  picture_lte?: String;
+  picture_gt?: String;
+  picture_gte?: String;
+  picture_contains?: String;
+  picture_not_contains?: String;
+  picture_starts_with?: String;
+  picture_not_starts_with?: String;
+  picture_ends_with?: String;
+  picture_not_ends_with?: String;
   timezone?: String;
   timezone_not?: String;
   timezone_in?: String[] | String;
@@ -839,7 +920,11 @@ export interface ActivityUpdateWithWhereUniqueWithoutHabitInput {
 
 export interface UserUpdateWithoutHabitsDataInput {
   email?: String;
+  authId?: String;
   name?: String;
+  firstName?: String;
+  lastName?: String;
+  picture?: String;
   timezone?: String;
 }
 
@@ -1022,7 +1107,11 @@ export interface AvatarUpdateInput {
 
 export interface UserUpdateManyMutationInput {
   email?: String;
+  authId?: String;
   name?: String;
+  firstName?: String;
+  lastName?: String;
+  picture?: String;
   timezone?: String;
 }
 
@@ -1032,8 +1121,12 @@ export interface NodeNode {
 
 export interface UserPreviousValues {
   id: ID_Output;
-  email?: String;
+  email: String;
+  authId: String;
   name: String;
+  firstName?: String;
+  lastName?: String;
+  picture?: String;
   timezone?: String;
 }
 
@@ -1042,7 +1135,11 @@ export interface UserPreviousValuesPromise
     Fragmentable {
   id: () => Promise<ID_Output>;
   email: () => Promise<String>;
+  authId: () => Promise<String>;
   name: () => Promise<String>;
+  firstName: () => Promise<String>;
+  lastName: () => Promise<String>;
+  picture: () => Promise<String>;
   timezone: () => Promise<String>;
 }
 
@@ -1051,7 +1148,11 @@ export interface UserPreviousValuesSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   email: () => Promise<AsyncIterator<String>>;
+  authId: () => Promise<AsyncIterator<String>>;
   name: () => Promise<AsyncIterator<String>>;
+  firstName: () => Promise<AsyncIterator<String>>;
+  lastName: () => Promise<AsyncIterator<String>>;
+  picture: () => Promise<AsyncIterator<String>>;
   timezone: () => Promise<AsyncIterator<String>>;
 }
 
@@ -1552,15 +1653,23 @@ export interface AggregateAvatarSubscription
 
 export interface User {
   id: ID_Output;
-  email?: String;
+  email: String;
+  authId: String;
   name: String;
+  firstName?: String;
+  lastName?: String;
+  picture?: String;
   timezone?: String;
 }
 
 export interface UserPromise extends Promise<User>, Fragmentable {
   id: () => Promise<ID_Output>;
   email: () => Promise<String>;
+  authId: () => Promise<String>;
   name: () => Promise<String>;
+  firstName: () => Promise<String>;
+  lastName: () => Promise<String>;
+  picture: () => Promise<String>;
   timezone: () => Promise<String>;
   habits: <T = FragmentableArray<Habit>>(
     args?: {
@@ -1580,7 +1689,11 @@ export interface UserSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   email: () => Promise<AsyncIterator<String>>;
+  authId: () => Promise<AsyncIterator<String>>;
   name: () => Promise<AsyncIterator<String>>;
+  firstName: () => Promise<AsyncIterator<String>>;
+  lastName: () => Promise<AsyncIterator<String>>;
+  picture: () => Promise<AsyncIterator<String>>;
   timezone: () => Promise<AsyncIterator<String>>;
   habits: <T = Promise<AsyncIterator<HabitSubscription>>>(
     args?: {

@@ -4,7 +4,7 @@ import gql from "graphql-tag";
 import Layout from "../../components/Layout";
 import Button from "../../components/Button";
 import { Formik } from "formik";
-import withApollo from "../../client/withApollo";
+import withPageContext from "../../client/withPageContext";
 
 const UserHabitsQuery = gql`
   query UserHabitsQuery($userId: ID!) {
@@ -20,7 +20,7 @@ const UserHabitsQuery = gql`
   }
 `;
 
-const Index = withApollo(() => (
+const Index = withPageContext(() => (
   <Layout>
     <h2>Your Habbits</h2>
     <Query

@@ -1,8 +1,8 @@
 import Teaser from "../components/Teaser";
 import Layout from "../components/Layout";
-import withApollo from "../client/withApollo";
+import withPageContext from "../client/withPageContext";
 
-const Index = withApollo(() => (
+const Index = withPageContext(() => (
   <Layout header={false}>
     <Teaser />
   </Layout>

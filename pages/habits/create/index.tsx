@@ -3,7 +3,7 @@ import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
 import Router from "next/router";
 import { Formik, Field } from "formik";
-import withApollo from "../../../client/withApollo";
+import withPageContext from "../../../client/withPageContext";
 
 import Layout from "../../../components/Layout";
 import {
@@ -100,7 +100,7 @@ const zipSchedule = formValues => {
     .filter(Boolean);
 };
 
-const Index = withApollo(() => (
+const Index = withPageContext(() => (
   <Layout>
     <Mutation mutation={CreateHabit}>
       {(createHabit, { data, errors, loading }) => (

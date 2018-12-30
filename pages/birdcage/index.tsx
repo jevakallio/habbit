@@ -1,9 +1,9 @@
 import Layout from "../../components/Layout";
-import withApollo from "../../client/withApollo";
+import withPageContext from "../../client/withPageContext";
 
 import { BirdsWorld, BirdsEye } from "../../components/BirdsEye";
 import Bird from "../../components/Bird";
-export default withApollo(() => (
+export default withPageContext(() => (
   <Layout header={false}>
     <BirdsWorld>
       <div className="World">

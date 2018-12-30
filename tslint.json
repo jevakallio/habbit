@@ -11,6 +11,7 @@
     "jsx-no-lambda": false,
     "jsx-boolean-value": false,
     "no-submodule-imports": false,
-    "arrow-parens": false
+    "arrow-parens": false,
+    "member-access": [true, "no-public"]
   }
 }

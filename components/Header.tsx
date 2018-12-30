@@ -1,12 +1,13 @@
 import Head from "next/head";
 import { Query } from "react-apollo";
 import gql from "graphql-tag";
+import { AuthConsumer } from "../client/AuthContext";
 import Logo from "./Logo";
 import { colors, layout } from "../theme";
 
 const UserQuery = gql`
   {
-    user(id: "cjq6mfok7sb260a985wz7qsn5") {
+    me {
       id
       name
       email
@@ -32,19 +33,25 @@ const Header = ({ children }) => (
       <div className="Logo">
         <Logo title="Habbit" />
       </div>
-      <Query query={UserQuery}>
-        {({ loading, error, data }) => {
-          if (error) {
-            console.error(error);
-            return <UserDisplay>:(</UserDisplay>;
-          }
-          if (!data || (!data.user && loading)) {
-            return <UserDisplay>...</UserDisplay>;
-          }
+      <AuthConsumer>
+        {auth => (
+          <Query query={UserQuery}>
+            {({ loading, error, data }) => {
+              if (!auth.isAuthenticated()) {
+                return <button onClick={auth.login}>Login</button>;
+              }
+              if (error) {
+                return <UserDisplay>:(</UserDisplay>;
+              }
+              if (!data || (!data.me && loading)) {
+                return <UserDisplay>...</UserDisplay>;
+              }
 
-          return <UserDisplay>{data.user.name}</UserDisplay>;
-        }}
-      </Query>
+              return <UserDisplay>{data.me.name}</UserDisplay>;
+            }}
+          </Query>
+        )}
+      </AuthConsumer>
     </div>
     <style jsx={true}>{`
       .HeaderBar {

@@ -2,7 +2,7 @@ import { withRouter } from "next/router";
 import { Query } from "react-apollo";
 import gql from "graphql-tag";
 import Layout from "../../components/Layout";
-import withApollo from "../../client/withApollo";
+import withPageContext from "../../client/withPageContext";
 import Bird from "../../components/Bird";
 import HabitDetails from "./HabitDetails";
 
@@ -46,4 +46,4 @@ const Habit = ({ router }) => (
   </Layout>
 );
 
-export default withApollo(withRouter(Habit));
+export default withPageContext(withRouter(Habit));

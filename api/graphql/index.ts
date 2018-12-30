@@ -2,13 +2,18 @@ import { prisma, Prisma } from "./prisma-client";
 import { GraphQLServer } from "graphql-yoga";
 import { typeDefs } from "./typeDefs";
 import { GraphQLError } from "graphql";
+import { authMiddleware, authorized } from "./auth";
 
 interface Context {
   prisma: Prisma;
+  user: {
+    sub: string;
+  };
 }
 
 const queryDefs = `
   type Query {
+    me: User
     user(id: ID!): User
     habit(id: ID!): Habit
     avatars: [Avatar!]!
@@ -33,20 +38,25 @@ const queryDefs = `
 
 const resolvers = {
   Query: {
-    user(parent, args, context: Context) {
+    me: authorized((parent, args, context: Context) => {
+      const authId = context.user.sub;
+      return context.prisma.user({ authId });
+    }),
+    user: authorized((parent, args, context: Context) => {
+      console.log(context.user);
       return context.prisma.user({ id: args.id });
-    },
-    habit(parent, args, context: Context) {
+    }),
+    habit: authorized((parent, args, context: Context) => {
       // @TODO Authenticate
       return context.prisma.habit({ id: args.id });
-    },
-    avatars(parent, args, context: Context) {
+    }),
+    avatars: (parent, args, context: Context) => {
       return context.prisma.avatars();
     }
   },
   Mutation: {
     createUser(parent, args, context: Context) {
-      return context.prisma.createUser({ name: args.name, email: args.email });
+      // return context.prisma.createUser({ name: args.name, email: args.email });
     },
     createHabit(parent, args, context: Context) {
       const { user, weeklySchedule, ...habit } = args.data;
@@ -117,15 +127,18 @@ const server = new GraphQLServer({
     ${typeDefs}
   `,
   resolvers,
-  context: {
-    prisma
-  }
+  context: req => ({
+    prisma,
+    user: req.request.user
+  })
 });
 
 const options = {
   endpoint: "/api/graphql",
   playground: "/api/graphql"
 };
+
+server.express.use(authMiddleware);
 
 server.start(options, () => console.log(`Server is running`));
 
