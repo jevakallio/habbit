@@ -150,8 +150,9 @@ const Index = withPageContext(() => (
             handleSubmit,
             isSubmitting
           }) => (
-            <form onSubmit={handleSubmit} autocomplete="off">
+            <form onSubmit={handleSubmit} autoComplete="off">
               <FormGroup
+                key="task"
                 name="task"
                 label="What habit do you want to track?"
                 errors={errors}
@@ -168,6 +169,7 @@ const Index = withPageContext(() => (
               </FormGroup>
 
               <FormGroup
+                key="frequency"
                 name="frequency"
                 label={`How often do you want to ${values.task || "..."}?`}
                 errors={errors}
@@ -176,6 +178,7 @@ const Index = withPageContext(() => (
               >
                 {Object.keys(frequencies).map(freq => (
                   <RadioButton
+                    key={"frequency-" + freq}
                     name="frequency"
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -189,6 +192,7 @@ const Index = withPageContext(() => (
 
               {values.frequency === "COUNT_PER_WEEK" && (
                 <FormGroup
+                  key="weeklyCount"
                   name="weeklyCount"
                   label={`How many days per week?`}
                   errors={errors}
@@ -199,6 +203,7 @@ const Index = withPageContext(() => (
                 >
                   {Object.keys(dayCounts).map(day => (
                     <RadioButton
+                      key={"weeklyCount-" + day}
                       name="weeklyCount"
                       onChange={handleChange}
                       onBlur={handleBlur}
@@ -213,6 +218,7 @@ const Index = withPageContext(() => (
 
               {values.frequency === "DAYS_PER_WEEK" && (
                 <FormGroup
+                  key="weeklySchedule"
                   name="weeklySchedule"
                   label={`Which weekdays?`}
                   errors={errors}

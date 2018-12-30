@@ -11,7 +11,7 @@ const AuthContext = createContext({
 });
 
 class Provider extends React.Component {
-  auth = new Auth(this.props.baseUrl);
+  auth = new Auth(this.props.baseUrl, this.props.cookies);
 
   render() {
     return (

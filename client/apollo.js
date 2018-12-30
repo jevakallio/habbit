@@ -5,6 +5,8 @@ import { InMemoryCache } from "apollo-cache-inmemory";
 import fetch from "isomorphic-unfetch";
 import debounce from "lodash.debounce";
 
+// @TODO we don't currently SSR any Apollo data...
+// See: https://github.com/lfades/next-with-apollo
 export const createClient = (uri, auth) => {
   const httpLink = createHttpLink({
     fetch,

@@ -49,7 +49,7 @@ const Index = withPageContext(() => (
         return (
           <div>
             {habits.map(habit => (
-              <div style={{ padding: "10px" }}>
+              <div key={habit.id} style={{ padding: "10px" }}>
                 <Link href={`/habit?id=${habit.id}`}>
                   <a>
                     {habit.task} ({habit.id})

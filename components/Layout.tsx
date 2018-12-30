@@ -13,22 +13,25 @@ const Layout = ({ children, header = true }) => (
         type="text/css"
         href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"
       />
-      <style type="text/css">{`
-        html {
-          box-sizing: border-box;
-        }
-        body {
-          font-family: "Helvetica Neue", Helvetica, "Liberation Sans", Roboto, Arial, sans-serif;
-        }
-        *, *:before, *:after {
-          box-sizing: inherit;
-        }
-      `}</style>
     </Head>
     <BirdsWorld>
       {header && <Header />}
       {header ? <Content>{children}</Content> : children}
     </BirdsWorld>
+    <style jsx global>{`
+      html {
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Helvetica Neue", Helvetica, "Liberation Sans", Roboto,
+          Arial, sans-serif;
+      }
+      *,
+      *:before,
+      *:after {
+        box-sizing: inherit;
+      }
+    `}</style>
   </div>
 );
 

@@ -1,7 +1,7 @@
 // src/Auth/Auth.js
 
 import auth0 from "auth0-js";
-
+import * as cookies from "browser-cookies";
 export default class Auth {
   accessToken;
   idToken;
@@ -17,7 +17,7 @@ export default class Auth {
     return (this.__singletonInstance = new Auth(...args));
   }
 
-  constructor(baseUrl) {
+  constructor(baseUrl, initialServerCookies) {
     this.auth0 = new auth0.WebAuth({
       domain: "habbit.eu.auth0.com",
       clientID: "vO7EatTwo0jwnqGd0gH5YW1lA0zXe56U",
@@ -37,12 +37,15 @@ export default class Auth {
     this.renewSession = this.renewSession.bind(this);
 
     // rehydrate session
-    if (typeof localStorage !== "undefined") {
-      const expiresAt = localStorage.getItem("auth:expiresAt");
-      this.accessToken = localStorage.getItem("auth:accessToken") || null;
-      this.idToken = localStorage.getItem("auth:idToken") || null;
-      this.expiresAt = expiresAt ? parseInt(expiresAt, 10) : null;
-    }
+    const {
+      auth_accessToken,
+      auth_idToken,
+      auth_expiresAt
+    } = initialServerCookies;
+
+    this.accessToken = auth_accessToken || null;
+    this.idToken = auth_idToken || null;
+    this.expiresAt = auth_expiresAt ? parseInt(auth_expiresAt, 10) : null;
   }
 
   login() {
@@ -89,9 +92,12 @@ export default class Auth {
     let expiresAt = authResult.expiresIn * 1000 + new Date().getTime();
 
     localStorage.setItem("auth:isLoggedIn", "true");
-    localStorage.setItem("auth:accessToken", authResult.accessToken);
-    localStorage.setItem("auth:idToken", authResult.idToken);
-    localStorage.setItem("auth:expiresAt", expiresAt);
+
+    if (process.browser) {
+      cookies.set("auth_accessToken", authResult.accessToken);
+      cookies.set("auth_idToken", authResult.idToken);
+      cookies.set("auth_expiresAt", `${expiresAt}`);
+    }
 
     this.accessToken = authResult.accessToken;
     this.idToken = authResult.idToken;
@@ -118,7 +124,7 @@ export default class Auth {
     this.expiresAt = 0;
 
     // Remove isLoggedIn flag from localStorage
-    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("auth:isLoggedIn");
   }
 
   isExpired() {

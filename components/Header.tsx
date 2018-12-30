@@ -34,23 +34,28 @@ const Header = ({ children }) => (
         <Logo title="Habbit" />
       </div>
       <AuthConsumer>
-        {auth => (
-          <Query query={UserQuery}>
-            {({ loading, error, data }) => {
-              if (!auth.isAuthenticated()) {
-                return <button onClick={auth.login}>Login</button>;
-              }
-              if (error) {
-                return <UserDisplay>:(</UserDisplay>;
-              }
-              if (!data || (!data.me && loading)) {
-                return <UserDisplay>...</UserDisplay>;
-              }
+        {auth =>
+          !auth.isAuthenticated() ? (
+            <button onClick={auth.login}>Login</button>
+          ) : (
+            <Query query={UserQuery}>
+              {({ loading, error, data }) => {
+                if (error) {
+                  console.log("render:error");
+                  return <UserDisplay>:(</UserDisplay>;
+                }
 
-              return <UserDisplay>{data.me.name}</UserDisplay>;
-            }}
-          </Query>
-        )}
+                if (loading) {
+                  console.log("render:loading");
+                  return null;
+                }
+
+                console.log("render:data");
+                return <UserDisplay>{data.me.name}</UserDisplay>;
+              }}
+            </Query>
+          )
+        }
       </AuthConsumer>
     </div>
     <style jsx={true}>{`
